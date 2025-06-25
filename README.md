@@ -1,6 +1,38 @@
-# Coffee Shop Management System
+# Coffee Shop Management System ☕
 
-A full-featured desktop application for coffee shop management using Java Swing for the user interface and MySQL as the database, running inside a Docker container.
+A modern full-featured desktop application for coffee shop management featuring a beautiful 2025 UI design with Java Swing and MySQL database.
+
+## 🚀 Quick Start
+
+### Option 1: One-Click Setup (Recommended)
+```bash
+# 1. Setup database
+quick-setup.bat
+
+# 2. Start application  
+start.bat
+```
+
+### Option 2: Manual Setup
+```bash
+# Start database
+docker-compose up -d
+
+# Run application
+java -jar coffee-shop-management-1.0.0.jar
+```
+
+## 🎨 2025 Modern UI Features
+- **Coffee Shop Themed Design**: Warm espresso browns and golden caramel accents
+- **Modern Components**: Enhanced buttons, cards, and input fields with hover effects
+- **Consistent Color Palette**: Professional and inviting visual identity
+- **Accessibility**: High contrast text and focus indicators
+- **Responsive Design**: Clean, intuitive interface for all user roles
+
+## 👥 Login Credentials
+- **Admin**: `admin` / `admin123`
+- **Waiter**: `waiter1` / `admin123`  
+- **Kitchen**: `kitchen1` / `admin123`
 
 ## Features
 
@@ -33,11 +65,18 @@ A full-featured desktop application for coffee shop management using Java Swing 
 - ✅ Comprehensive error handling
 - ✅ Logging with Logback
 
-## Prerequisites
+## 🗄️ Database Access
+- **phpMyAdmin**: http://localhost:8080
+- **MySQL Direct**: `localhost:3306`
+- **Username**: `coffeeuser`
+- **Password**: `coffee123`
+- **Database**: `coffeeshop`
+
+## 📋 Prerequisites
 
 - Java 11 or higher
-- Maven 3.6 or higher
-- Docker and Docker Compose
+- Docker and Docker Compose (for database)
+- (Optional) Maven 3.6+ for development
 
 ## Setup Instructions
 
