@@ -103,9 +103,9 @@ INSERT INTO categories (name, description) VALUES
 
 -- Insert default admin user (password: admin123)
 INSERT INTO users (username, password, role, full_name, email) VALUES 
-('admin', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ADMIN', 'System Administrator', 'admin@coffeeshop.com'),
-('waiter1', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'WAITER', 'John Waiter', 'waiter1@coffeeshop.com'),
-('kitchen1', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'KITCHEN', 'Kitchen Staff', 'kitchen1@coffeeshop.com');
+('admin', '$2a$10$MMLJ8xgactum9zWb4S.t2OljQzHfeXZXqlNQgt54wKlnKJyXgeVo2', 'ADMIN', 'System Administrator', 'admin@coffeeshop.com'),
+('waiter1', '$2a$10$MMLJ8xgactum9zWb4S.t2OljQzHfeXZXqlNQgt54wKlnKJyXgeVo2', 'WAITER', 'John Waiter', 'waiter1@coffeeshop.com'),
+('kitchen1', '$2a$10$MMLJ8xgactum9zWb4S.t2OljQzHfeXZXqlNQgt54wKlnKJyXgeVo2', 'KITCHEN', 'Kitchen Staff', 'kitchen1@coffeeshop.com');
 
 -- Insert sample menu items
 INSERT INTO menu_items (name, category_id, description, price, preparation_time) VALUES 

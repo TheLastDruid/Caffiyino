@@ -124,9 +124,9 @@ public class WaiterDashboard extends JFrame {
     
     private void viewMenu() {
         try {
-            MenuViewPanel menuPanel = new MenuViewPanel();
+            ModernMenuViewPanel menuPanel = new ModernMenuViewPanel();
             menuPanel.setVisible(true);
-            logger.info("Menu view panel opened");
+            logger.info("Modern menu view panel opened");
         } catch (Exception e) {
             logger.error("Error opening Menu view panel", e);
             UIUtils.showError(this, "Error opening Menu view: " + e.getMessage());

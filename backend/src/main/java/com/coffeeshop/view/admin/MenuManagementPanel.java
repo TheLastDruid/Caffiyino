@@ -43,6 +43,9 @@ public class MenuManagementPanel extends JFrame {
     private JTextField priceField;
     private JCheckBox availableCheckbox;
     private JTextField preparationTimeField;
+    private JTextField imagePathField;
+    private JButton imageSelectButton;
+    private JLabel imagePreviewLabel;
     
     public MenuManagementPanel() {
         this.menuService = new MenuService();
@@ -90,6 +93,21 @@ public class MenuManagementPanel extends JFrame {
         priceField = UIUtils.createStyledTextField();
         availableCheckbox = new JCheckBox("Available");
         preparationTimeField = UIUtils.createStyledTextField();
+        
+        // Image components
+        imagePathField = UIUtils.createStyledTextField();
+        imagePathField.setEditable(false);
+        imageSelectButton = UIUtils.createImageSelectButton();
+        imagePreviewLabel = UIUtils.createPlaceholderImageLabel(80, 80);
+        
+        // Image selection event
+        imageSelectButton.addActionListener(e -> {
+            String imagePath = UIUtils.selectImageFile(this);
+            if (imagePath != null) {
+                imagePathField.setText(imagePath);
+                updateImagePreview(imagePath);
+            }
+        });
         
         // Load categories
         loadCategories();
@@ -288,6 +306,21 @@ public class MenuManagementPanel extends JFrame {
         gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
         formPanel.add(availableCheckbox, gbc);
         
+        // Image
+        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 1; gbc.fill = GridBagConstraints.NONE;
+        formPanel.add(new JLabel("Image:"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        JPanel imagePanel = new JPanel(new BorderLayout(5, 5));
+        imagePanel.add(imagePathField, BorderLayout.CENTER);
+        imagePanel.add(imageSelectButton, BorderLayout.EAST);
+        formPanel.add(imagePanel, gbc);
+        
+        // Image preview
+        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        formPanel.add(imagePreviewLabel, gbc);
+        
         return JOptionPane.showConfirmDialog(this, formPanel, title, 
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
     }
@@ -299,6 +332,10 @@ public class MenuManagementPanel extends JFrame {
         priceField.setText("");
         preparationTimeField.setText("0");
         availableCheckbox.setSelected(true);
+        imagePathField.setText("");
+        imagePreviewLabel.setIcon(null);
+        imagePreviewLabel.setText("📷");
+        imagePreviewLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
     }
     
     private void populateForm(MenuItem item) {
@@ -317,6 +354,17 @@ public class MenuManagementPanel extends JFrame {
         priceField.setText(item.getPrice().toString());
         preparationTimeField.setText(String.valueOf(item.getPreparationTime()));
         availableCheckbox.setSelected(item.isAvailable());
+        
+        // Update image
+        String imagePath = item.getImagePath();
+        if (imagePath != null && !imagePath.isEmpty()) {
+            imagePathField.setText(imagePath);
+            updateImagePreview(imagePath);
+        } else {
+            imagePathField.setText("");
+            imagePreviewLabel.setIcon(null);
+            imagePreviewLabel.setText("📷");
+        }
     }
     
     private MenuItem createMenuItemFromForm() throws IllegalArgumentException {
@@ -347,9 +395,36 @@ public class MenuManagementPanel extends JFrame {
             item.setPreparationTime(prepTime);
             item.setAvailable(availableCheckbox.isSelected());
             
+            // Set image path if provided
+            String imagePath = imagePathField.getText().trim();
+            if (!imagePath.isEmpty()) {
+                item.setImagePath(imagePath);
+            }
+            
             return item;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid number format in price or preparation time");
+        }
+    }
+    
+    /**
+     * Update the image preview label with the selected image
+     */
+    private void updateImagePreview(String imagePath) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            ImageIcon icon = UIUtils.loadImageIcon(imagePath, 80, 80);
+            if (icon != null) {
+                imagePreviewLabel.setIcon(icon);
+                imagePreviewLabel.setText("");
+            } else {
+                imagePreviewLabel.setIcon(null);
+                imagePreviewLabel.setText("❌");
+                imagePreviewLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
+            }
+        } else {
+            imagePreviewLabel.setIcon(null);
+            imagePreviewLabel.setText("📷");
+            imagePreviewLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
         }
     }
 }

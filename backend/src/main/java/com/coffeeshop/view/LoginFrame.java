@@ -166,8 +166,30 @@ public class LoginFrame extends JFrame {
         setTitle("Coffee Shop Management - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 600);
-        setResizable(false);
+        setResizable(true);
+        setMinimumSize(new Dimension(400, 500));
         UIUtils.centerOnScreen(this);
+        
+        // Add fullscreen toggle with F11 key
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+            KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0), "fullscreen");
+        getRootPane().getActionMap().put("fullscreen", new AbstractAction() {
+            private Rectangle normalBounds;
+            private boolean isFullscreen = false;
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isFullscreen) {
+                    normalBounds = getBounds();
+                    setExtendedState(Frame.MAXIMIZED_BOTH);
+                    isFullscreen = true;
+                } else {
+                    setExtendedState(Frame.NORMAL);
+                    setBounds(normalBounds);
+                    isFullscreen = false;
+                }
+            }
+        });
         
         // Set focus to username field
         SwingUtilities.invokeLater(() -> usernameField.requestFocus());
