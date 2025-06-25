@@ -132,7 +132,7 @@ public class UserManagementPanel extends JFrame {
     private void setupFrame() {
         setTitle("User Management");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1000, 600);
+        UIUtils.setResponsiveSize(this, 1000, 600);
         setResizable(true);
         UIUtils.centerOnScreen(this);
     }

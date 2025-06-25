@@ -165,9 +165,9 @@ public class LoginFrame extends JFrame {
     private void setupFrame() {
         setTitle("Coffee Shop Management - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 600);
+        UIUtils.setResponsiveSize(this, 500, 600);
         setResizable(true);
-        setMinimumSize(new Dimension(400, 500));
+        setMinimumSize(UIUtils.getResponsiveSize(400, 500));
         UIUtils.centerOnScreen(this);
         
         // Add fullscreen toggle with F11 key

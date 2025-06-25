@@ -117,7 +117,7 @@ public class AdminDashboard extends JFrame {
     private void setupFrame() {
         setTitle("Coffee Shop Management - Admin Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        UIUtils.setResponsiveSize(this, 800, 600);
         setResizable(true);
         UIUtils.centerOnScreen(this);
     }

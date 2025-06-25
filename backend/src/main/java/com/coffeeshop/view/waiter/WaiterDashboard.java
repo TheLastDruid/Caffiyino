@@ -50,39 +50,44 @@ public class WaiterDashboard extends JFrame {
         welcomeLabel = UIUtils.createTitleLabel("Welcome, " + currentUser.getFullName());
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
+        // Responsive button sizes
+        Dimension mainBtnSize = UIUtils.isMobileScreen() ? new Dimension(120, 48) : new Dimension(200, 80);
+        Dimension logoutBtnSize = UIUtils.isMobileScreen() ? new Dimension(70, 28) : new Dimension(100, 40);
+        
         // Menu buttons
         viewMenuButton = UIUtils.createPrimaryButton("View Menu");
-        viewMenuButton.setPreferredSize(new Dimension(200, 80));
+        viewMenuButton.setPreferredSize(mainBtnSize);
         
         newOrderButton = UIUtils.createSuccessButton("New Order");
-        newOrderButton.setPreferredSize(new Dimension(200, 80));
+        newOrderButton.setPreferredSize(mainBtnSize);
         
         myOrdersButton = UIUtils.createPrimaryButton("My Orders");
-        myOrdersButton.setPreferredSize(new Dimension(200, 80));
+        myOrdersButton.setPreferredSize(mainBtnSize);
         
         tablesButton = UIUtils.createPrimaryButton("Table Management");
-        tablesButton.setPreferredSize(new Dimension(200, 80));
+        tablesButton.setPreferredSize(mainBtnSize);
         
         logoutButton = UIUtils.createDangerButton("Logout");
-        logoutButton.setPreferredSize(new Dimension(100, 40));
+        logoutButton.setPreferredSize(logoutBtnSize);
     }
     
     private void setupLayout() {
         // Main panel setup
         mainPanel.setBackground(UIUtils.LIGHT_GRAY);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBorder(UIUtils.createResponsiveBorder());
         
         // Header panel
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(UIUtils.LIGHT_GRAY);
         headerPanel.add(welcomeLabel, BorderLayout.CENTER);
         headerPanel.add(logoutButton, BorderLayout.EAST);
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, UIUtils.getResponsivePadding(30), 0));
         
         // Content panel with grid layout
         UIUtils.styleAsCard(contentPanel);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 15, 15, 15);
+        int gap = UIUtils.getResponsivePadding(15);
+        gbc.insets = new Insets(gap, gap, gap, gap);
         gbc.fill = GridBagConstraints.BOTH;
         
         // Row 1
@@ -117,7 +122,7 @@ public class WaiterDashboard extends JFrame {
     private void setupFrame() {
         setTitle("Coffee Shop Management - Waiter Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        UIUtils.setResponsiveSize(this, 800, 600);
         setResizable(true);
         UIUtils.centerOnScreen(this);
     }
@@ -156,7 +161,14 @@ public class WaiterDashboard extends JFrame {
     }
     
     private void manageTable() {
-        UIUtils.showSuccess(this, "Table Management will be implemented in the next phase!");
+        try {
+            TableManagementPanel tablePanel = new TableManagementPanel();
+            tablePanel.setVisible(true);
+            logger.info("Table management panel opened");
+        } catch (Exception e) {
+            logger.error("Error opening Table management panel", e);
+            UIUtils.showError(this, "Error opening Table management: " + e.getMessage());
+        }
     }
     
     private void performLogout() {

@@ -117,25 +117,53 @@ public class KitchenDashboard extends JFrame {
     private void setupFrame() {
         setTitle("Coffee Shop Management - Kitchen Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        UIUtils.setResponsiveSize(this, 800, 600);
         setResizable(true);
         UIUtils.centerOnScreen(this);
     }
     
     private void viewNewOrders() {
-        UIUtils.showSuccess(this, "New Orders view will be implemented in the next phase!");
+        try {
+            KitchenOrderPanel orderPanel = new KitchenOrderPanel(com.coffeeshop.model.Order.Status.NEW);
+            orderPanel.setVisible(true);
+            logger.info("New orders panel opened");
+        } catch (Exception e) {
+            logger.error("Error opening new orders panel", e);
+            UIUtils.showError(this, "Error opening new orders: " + e.getMessage());
+        }
     }
     
     private void viewInProgressOrders() {
-        UIUtils.showSuccess(this, "In Progress Orders view will be implemented in the next phase!");
+        try {
+            KitchenOrderPanel orderPanel = new KitchenOrderPanel(com.coffeeshop.model.Order.Status.IN_PROGRESS);
+            orderPanel.setVisible(true);
+            logger.info("In progress orders panel opened");
+        } catch (Exception e) {
+            logger.error("Error opening in progress orders panel", e);
+            UIUtils.showError(this, "Error opening in progress orders: " + e.getMessage());
+        }
     }
     
     private void viewReadyOrders() {
-        UIUtils.showSuccess(this, "Ready Orders view will be implemented in the next phase!");
+        try {
+            KitchenOrderPanel orderPanel = new KitchenOrderPanel(com.coffeeshop.model.Order.Status.READY);
+            orderPanel.setVisible(true);
+            logger.info("Ready orders panel opened");
+        } catch (Exception e) {
+            logger.error("Error opening ready orders panel", e);
+            UIUtils.showError(this, "Error opening ready orders: " + e.getMessage());
+        }
     }
     
     private void viewCompletedOrders() {
-        UIUtils.showSuccess(this, "Completed Orders view will be implemented in the next phase!");
+        try {
+            KitchenOrderPanel orderPanel = new KitchenOrderPanel(com.coffeeshop.model.Order.Status.COMPLETED);
+            orderPanel.setVisible(true);
+            logger.info("Completed orders panel opened");
+        } catch (Exception e) {
+            logger.error("Error opening completed orders panel", e);
+            UIUtils.showError(this, "Error opening completed orders: " + e.getMessage());
+        }
     }
     
     private void performLogout() {
@@ -145,9 +173,7 @@ public class KitchenDashboard extends JFrame {
             
             // Close this window and show login
             dispose();
-            SwingUtilities.invokeLater(() -> {
-                new LoginFrame().setVisible(true);
-            });
+            SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
         }
     }
 }

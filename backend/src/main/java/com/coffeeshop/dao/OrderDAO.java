@@ -81,4 +81,26 @@ public interface OrderDAO extends GenericDAO<Order, Long> {
      * @throws SQLException if database error occurs
      */
     String generateOrderNumber() throws SQLException;
+    
+    /**
+     * Find active orders (NEW, IN_PROGRESS)
+     * @return List of active orders
+     * @throws SQLException if database error occurs
+     */
+    List<Order> findActiveOrders() throws SQLException;
+    
+    /**
+     * Find completed orders (READY, COMPLETED)
+     * @return List of completed orders
+     * @throws SQLException if database error occurs
+     */
+    List<Order> findCompletedOrders() throws SQLException;
+    
+    /**
+     * Search orders by various criteria
+     * @param searchTerm Search term
+     * @return List of matching orders
+     * @throws SQLException if database error occurs
+     */
+    List<Order> searchOrders(String searchTerm) throws SQLException;
 }

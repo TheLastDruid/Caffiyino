@@ -73,15 +73,99 @@ public class UIUtils {
     public static final Font LARGE_FONT = new Font(FONT_FAMILY, Font.PLAIN, 16);
     public static final Font BUTTON_FONT = new Font(FONT_FAMILY, Font.BOLD, 14);
     
+    // Mobile-Friendly Fonts (6-inch screens)
+    public static final Font MOBILE_TITLE_FONT = new Font(FONT_FAMILY, Font.BOLD, 18);
+    public static final Font MOBILE_HEADER_FONT = new Font(FONT_FAMILY, Font.BOLD, 14);
+    public static final Font MOBILE_NORMAL_FONT = new Font(FONT_FAMILY, Font.PLAIN, 11);
+    public static final Font MOBILE_SMALL_FONT = new Font(FONT_FAMILY, Font.PLAIN, 9);
+    public static final Font MOBILE_BUTTON_FONT = new Font(FONT_FAMILY, Font.BOLD, 11);
+    
+    // Screen size detection
+    private static boolean isMobileScreen = false;
+    private static final int MOBILE_SCREEN_THRESHOLD = 600; // pixels width
+    
+    static {
+        // Detect if we're on a small screen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        isMobileScreen = screenSize.width <= MOBILE_SCREEN_THRESHOLD || screenSize.height <= MOBILE_SCREEN_THRESHOLD;
+    }
+    
+    /**
+     * Check if the current screen is mobile-sized (6-inch or smaller)
+     */
+    public static boolean isMobileScreen() {
+        return isMobileScreen;
+    }
+    
+    /**
+     * Get the appropriate font for current screen size
+     */
+    public static Font getResponsiveFont(Font desktopFont, Font mobileFont) {
+        return isMobileScreen() ? mobileFont : desktopFont;
+    }
+    
+    /**
+     * Get responsive title font
+     */
+    public static Font getResponsiveTitleFont() {
+        return getResponsiveFont(TITLE_FONT, MOBILE_TITLE_FONT);
+    }
+    
+    /**
+     * Get responsive header font
+     */
+    public static Font getResponsiveHeaderFont() {
+        return getResponsiveFont(HEADER_FONT, MOBILE_HEADER_FONT);
+    }
+    
+    /**
+     * Get responsive normal font
+     */
+    public static Font getResponsiveNormalFont() {
+        return getResponsiveFont(NORMAL_FONT, MOBILE_NORMAL_FONT);
+    }
+    
+    /**
+     * Get responsive button font
+     */
+    public static Font getResponsiveButtonFont() {
+        return getResponsiveFont(BUTTON_FONT, MOBILE_BUTTON_FONT);
+    }
+    
+    /**
+     * Get responsive window dimensions
+     */
+    public static Dimension getResponsiveSize(int desktopWidth, int desktopHeight) {
+        if (isMobileScreen()) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            // Use 90% of screen size for mobile, with maximum constraints
+            int width = Math.min((int)(screenSize.width * 0.9), Math.min(desktopWidth, 480));
+            int height = Math.min((int)(screenSize.height * 0.9), Math.min(desktopHeight, 640));
+            return new Dimension(width, height);
+        }
+        return new Dimension(desktopWidth, desktopHeight);
+    }
+    
+    /**
+     * Get responsive padding/margin
+     */
+    public static int getResponsivePadding(int desktopPadding) {
+        return isMobileScreen() ? Math.max(desktopPadding / 2, 4) : desktopPadding;
+    }
+    
     /**
      * Create a modern 2025 styled button with primary color
      */
     public static JButton createPrimaryButton(String text) {
         JButton button = new JButton(text);
-        button.setFont(BUTTON_FONT);
+        button.setFont(getResponsiveButtonFont());
         button.setForeground(TEXT_INVERSE);
         button.setBackground(PRIMARY_COLOR);
-        button.setBorder(BorderFactory.createEmptyBorder(14, 28, 14, 28));
+        
+        // Responsive padding
+        int vPadding = getResponsivePadding(14);
+        int hPadding = getResponsivePadding(28);
+        button.setBorder(BorderFactory.createEmptyBorder(vPadding, hPadding, vPadding, hPadding));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setOpaque(true);
@@ -89,7 +173,7 @@ public class UIUtils {
         // Modern 2025 shadow effect with new colors
         button.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(BORDER_MEDIUM, 1),
-            BorderFactory.createEmptyBorder(14, 28, 14, 28)
+            BorderFactory.createEmptyBorder(vPadding, hPadding, vPadding, hPadding)
         ));
         
         // Smooth hover transition with updated palette
@@ -97,18 +181,22 @@ public class UIUtils {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(PRIMARY_HOVER);
+                int vPadding = getResponsivePadding(14);
+                int hPadding = getResponsivePadding(28);
                 button.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(PRIMARY_DARK, 1),
-                    BorderFactory.createEmptyBorder(14, 28, 14, 28)
+                    BorderFactory.createEmptyBorder(vPadding, hPadding, vPadding, hPadding)
                 ));
             }
             
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(PRIMARY_COLOR);
+                int vPadding = getResponsivePadding(14);
+                int hPadding = getResponsivePadding(28);
                 button.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(BORDER_MEDIUM, 1),
-                    BorderFactory.createEmptyBorder(14, 28, 14, 28)
+                    BorderFactory.createEmptyBorder(vPadding, hPadding, vPadding, hPadding)
                 ));
             }
         });
@@ -129,18 +217,22 @@ public class UIUtils {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(22, 101, 22)); // Darker success
+                int vPadding = getResponsivePadding(14);
+                int hPadding = getResponsivePadding(28);
                 button.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(new Color(22, 101, 22), 1),
-                    BorderFactory.createEmptyBorder(14, 28, 14, 28)
+                    BorderFactory.createEmptyBorder(vPadding, hPadding, vPadding, hPadding)
                 ));
             }
             
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(SUCCESS_COLOR);
+                int vPadding = getResponsivePadding(14);
+                int hPadding = getResponsivePadding(28);
                 button.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(BORDER_MEDIUM, 1),
-                    BorderFactory.createEmptyBorder(14, 28, 14, 28)
+                    BorderFactory.createEmptyBorder(vPadding, hPadding, vPadding, hPadding)
                 ));
             }
         });
@@ -250,10 +342,13 @@ public class UIUtils {
      */
     public static JTextField createStyledTextField() {
         JTextField textField = new JTextField();
-        textField.setFont(NORMAL_FONT);
+        textField.setFont(getResponsiveNormalFont());
+        
+        int vPadding = getResponsivePadding(14);
+        int hPadding = getResponsivePadding(16);
         textField.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(BORDER_MEDIUM, 1),
-            BorderFactory.createEmptyBorder(14, 16, 14, 16)
+            BorderFactory.createEmptyBorder(vPadding, hPadding, vPadding, hPadding)
         ));
         textField.setBackground(SURFACE_PRIMARY);
         textField.setForeground(TEXT_PRIMARY);
@@ -643,5 +738,35 @@ public class UIUtils {
             return fileChooser.getSelectedFile().getAbsolutePath();
         }
         return null;
+    }
+    
+    /**
+     * Apply responsive size to a window/frame
+     */
+    public static void setResponsiveSize(Window window, int desktopWidth, int desktopHeight) {
+        Dimension size = getResponsiveSize(desktopWidth, desktopHeight);
+        window.setSize(size);
+        
+        // For mobile screens, try to maximize if it's a frame
+        if (isMobileScreen() && window instanceof Frame) {
+            ((Frame) window).setExtendedState(Frame.MAXIMIZED_BOTH);
+        }
+    }
+    
+    /**
+     * Create responsive margins for panels
+     */
+    public static javax.swing.border.Border createResponsiveBorder() {
+        int margin = getResponsivePadding(10);
+        return BorderFactory.createEmptyBorder(margin, margin, margin, margin);
+    }
+    
+    /**
+     * Create responsive titled border
+     */
+    public static javax.swing.border.Border createResponsiveTitledBorder(String title) {
+        javax.swing.border.TitledBorder border = BorderFactory.createTitledBorder(title);
+        border.setTitleFont(getResponsiveHeaderFont());
+        return BorderFactory.createCompoundBorder(border, createResponsiveBorder());
     }
 }

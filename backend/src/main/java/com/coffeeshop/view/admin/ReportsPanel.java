@@ -102,7 +102,7 @@ public class ReportsPanel extends JFrame {
     private void setupFrame() {
         setTitle("Reports & Analytics");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 500);
+        UIUtils.setResponsiveSize(this, 600, 500);
         setResizable(true);
         UIUtils.centerOnScreen(this);
     }

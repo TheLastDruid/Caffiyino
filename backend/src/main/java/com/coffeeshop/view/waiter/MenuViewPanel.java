@@ -75,7 +75,7 @@ public class MenuViewPanel extends JFrame {
     private void setupFrame() {
         setTitle("Menu View");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(800, 600);
+        UIUtils.setResponsiveSize(this, 800, 600);
         setResizable(true);
         UIUtils.centerOnScreen(this);
     }

@@ -33,6 +33,7 @@ public class MenuManagementPanel extends JFrame {
     private JButton editButton;
     private JButton deleteButton;
     private JButton refreshButton;
+    private JButton clearSearchButton;
     private JTextField searchField;
     private JComboBox<Category> categoryFilter;
     
@@ -80,11 +81,14 @@ public class MenuManagementPanel extends JFrame {
         editButton = UIUtils.createPrimaryButton("Edit Item");
         deleteButton = UIUtils.createDangerButton("Delete Item");
         refreshButton = UIUtils.createPrimaryButton("Refresh");
+        clearSearchButton = UIUtils.createSecondaryButton("Clear");
         
         // Search and filter components
         searchField = UIUtils.createStyledTextField();
         searchField.setColumns(20);
+        searchField.setToolTipText("Type to search menu items by name");
         categoryFilter = UIUtils.createStyledComboBox();
+        categoryFilter.setToolTipText("Filter by category");
         
         // Form components
         nameField = UIUtils.createStyledTextField();
@@ -121,6 +125,7 @@ public class MenuManagementPanel extends JFrame {
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.add(new JLabel("Search:"));
         topPanel.add(searchField);
+        topPanel.add(clearSearchButton);
         topPanel.add(new JLabel("Category:"));
         topPanel.add(categoryFilter);
         topPanel.add(refreshButton);
@@ -146,6 +151,20 @@ public class MenuManagementPanel extends JFrame {
         deleteButton.addActionListener(e -> deleteSelectedItem());
         refreshButton.addActionListener(e -> loadMenuItems());
         
+        // Clear search functionality
+        clearSearchButton.addActionListener(e -> clearSearch());
+        
+        // Search functionality
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                filterMenuItems();
+            }
+        });
+        
+        // Category filter functionality
+        categoryFilter.addActionListener(e -> filterMenuItems());
+        
         // Enable/disable edit and delete buttons based on selection
         menuTable.getSelectionModel().addListSelectionListener(e -> {
             boolean hasSelection = menuTable.getSelectedRow() >= 0;
@@ -161,7 +180,7 @@ public class MenuManagementPanel extends JFrame {
     private void setupFrame() {
         setTitle("Menu Management");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1000, 700);
+        UIUtils.setResponsiveSize(this, 1000, 700);
         setResizable(true);
         UIUtils.centerOnScreen(this);
     }
@@ -426,5 +445,52 @@ public class MenuManagementPanel extends JFrame {
             imagePreviewLabel.setText("📷");
             imagePreviewLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
         }
+    }
+    
+    private void filterMenuItems() {
+        try {
+            String searchText = searchField.getText().trim();
+            Category selectedCategory = (Category) categoryFilter.getSelectedItem();
+            
+            List<MenuItem> menuItems;
+            
+            // If search text is provided, use search functionality
+            if (!searchText.isEmpty()) {
+                menuItems = menuService.searchMenuItems(searchText);
+            } else {
+                menuItems = menuService.getAllMenuItems();
+            }
+            
+            // Filter by category if selected
+            if (selectedCategory != null) {
+                menuItems = menuItems.stream()
+                    .filter(item -> selectedCategory.getId().equals(item.getCategoryId()))
+                    .collect(java.util.stream.Collectors.toList());
+            }
+            
+            // Update table
+            tableModel.setRowCount(0);
+            for (MenuItem item : menuItems) {
+                Object[] row = {
+                    item.getId(),
+                    item.getName(),
+                    item.getCategoryName(),
+                    item.getDescription(),
+                    "$" + item.getPrice(),
+                    item.isAvailable() ? "Yes" : "No",
+                    item.getPreparationTime() + " min"
+                };
+                tableModel.addRow(row);
+            }
+        } catch (Exception e) {
+            logger.error("Error filtering menu items", e);
+            UIUtils.showError(this, "Error filtering menu items: " + e.getMessage());
+        }
+    }
+    
+    private void clearSearch() {
+        searchField.setText("");
+        categoryFilter.setSelectedIndex(0); // Select "All Categories"
+        loadMenuItems(); // Reload all items
     }
 }
