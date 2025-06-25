@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: coffeeshop_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: coffeeshop
+      MYSQL_USER: coffeeuser
+      MYSQL_PASSWORD: coffee123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - coffeeshop_network
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: coffeeshop_phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: coffeeuser
+      PMA_PASSWORD: coffee123
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - coffeeshop_network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  coffeeshop_network:
+    driver: bridge
